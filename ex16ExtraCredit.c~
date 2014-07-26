@@ -10,9 +10,12 @@ struct Person
 	int age;
 	int height;
 	int weight;
-}person;
+}person; //<-- person is the type of object for struct person.
+
+/*Now create person*/
 void Person_create(char *name, int age, int height, int weight)
 {
+	//using person object store the information
 	person.name = name;
 	person.age = age;
 	person.height = height;
