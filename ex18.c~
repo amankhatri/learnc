@@ -31,11 +31,14 @@ void die(const char *message)
 	exit(1);
 }
 // a typedef creates a fake type, in this case for a function pointer
+/*This is where the "typedef" is used, and later I use "compare_cb" like it is a type similar to "int" or "char" in the function "bubble_sort"*/
 typedef int (*compare_cb)(int a, int b);
 
 /* A classic bubble sort function that uses the compare_cb to do the sorting */
+/*Here is where I use the typedef for "compare_cb" as the last parameter "cmp". This is now a function that will return a comparision between two integers for sorting.*/
 int *bubble_sort(int *number, int count, compare_cb cmp)
 {
+/*The usual creation of variables on the stack, followed by a new array of integers on the heap  using malloc. Make sure you understand whaat "count *sizeof(int)" is doing.*/
 	int temp = 0;
 	int i = 0;
 	int j = 0;	
@@ -45,20 +48,26 @@ int *bubble_sort(int *number, int count, compare_cb cmp)
 		die("Memory Error");
 	}
 	memcpy(target, number, count * sizeof(int));
+/*The outer loop of the bubble sort*/
 	for(i=0;i<count;i++)
 	{
+/*The inner loop of the bubble sort*/
 		for(j=0;j<count-1;j++)
 		{
+/*Now I call the "cmp" callback just like it is a normal function, but instead of being the name of something we defined, it is just a pointer to it. This lets the caller pass in anything they want as long as it matches the "signature" of the "compare_cb typedef".*/
 			if(cmp(target[j], target[j+1]) >0)
 			{
+/*Actual swapping operation a bubble sort needs to do what it does*/
 				temp = target[j+1];
 				target[j+1] = target[j];
 				target[j] = temp;
 			}
 		}
 	}
+/*Finally return the newly created and sorted array target*/
 	return target;
 }
+/*Three different versions of the "compare_cb" function type which needs to have the same defination as the "typedef" we created.  C compiler will complain to you if you get this wrong and say the types don't match*/
 int sorted_order(int a , int b)
 {
 	return a-b;
@@ -79,6 +88,7 @@ int strange_order(int a, int b)
 	}
 }
 /*Used to test that we are sorting things correctly by doing the sort and printing it out*/
+/*THis is a tester for the bubble_sort function. You  can see now how I am also using "compare_cb" to then pass to "bubble_sort" demosntrating how these can be passed around like any other pointers */
 void test_sorting(int *numbers, int count, compare_cb cmp)
 {
 	int i = 0;
@@ -92,9 +102,10 @@ void test_sorting(int *numbers, int count, compare_cb cmp)
 		printf("%d ", sorted[i]);
 	}
 	printf("\n");
+/*free the memory*/
 	free(sorted);
 }
-
+/*A simple main function that sets up an array based on integers you pass on the command line, then calls the "test_sorting" function"*/
 int main(int argc, char *argv[])
 {
 	if(argc < 2)
@@ -113,8 +124,22 @@ int main(int argc, char *argv[])
 	{
 		numbers[i] = atoi(inputs[i]);
 	}
+/*Finally you get to see how the "compare_cb" function pointer "typedef" is used. I simply call "test_sorting" but give it the name of "sorted_order", "reverse_order and "strange_order" as the function to use. The C compiler then find the address of those functions, and makes it a pointer for "test_sorting" to use. If you look at "test_sorting"s you will see it then passes each of these to "bubble_sort" but it actually has no idea what they do, only tht they match the compare_cb" prototype and should work.*/
 	test_sorting(numbers, count, sorted_order);
-	test_sorting(numbers, count, sorted_order);
-	test_sorting(numbers, count, sorted_order);
+	test_sorting(numbers, count, reverse_order);
+	test_sorting(numbers, count, strange_order);
+/*last thing we do is free up the array  of numbers we made.*/	
+	free(numbers);
 	return 0;
 }
+/*I am going to have you do something kind of weird to break this.  These function pointers are pointers like every other pointer, so they point at blocks of memory. C has this ability to take one pointer and convert it to another so you can process the data in different way. It is usually not necessary, but to show you how to have compyter I want you to add this at the end of "test_sorting"*/
+/* 
+	unsigned char *data = (unsigned char *)cmp;
+	for(i=0;i<25;i++)
+	{
+		printf("%02x:", data[i]);
+	}
+	printf("\n");
+*/
+/*This loop is sort of like converting your function to a string and then print out its contents. This wont break this program unless the CPU and OS you are on has a problem with you doing this. What you will see is a string of hexadecimal numbers after it prints the sorted array.*/
+/*That should be the raw assembler byte code of the function itself, and you should see they start the same, but then have different endings. It is also possible that this loop is not getting all of the function or is getting too much and stomping on another piece of program. Without more analysis you wouldnt know.*/
