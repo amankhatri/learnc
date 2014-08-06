@@ -1,0 +1,58 @@
+/*Ref-www.tutorialpoint.com/cprogramming/c_structures.html*/ 
+/*the code has been modified */
+/*structure allows is a user defined datatype, which allows you to combine data items of different kinds.*/
+#include<stdio.h>
+#include<string.h>
+struct Books
+{
+	char *title;
+	char *author;
+	char *subject;
+	int book_id;	
+};
+/*when you the function returns struct type it always tries to return the pointer to the structure not just the entire structure so if you do 
+struct Books book_create(char *bookTitle, char *bookAuthor, char *bookSubject, int book_id)
+{
+	struct Books *books = malloc(sizeof(struct Books));
+	//assert(books!=NULL);
+	books->title = strdup(bookTitle);
+	books->author = strdup(bookAuthor);
+	books->subject = strdup(bookSubject);
+	books->book_id = book_id;
+	return books;
+}
+you will get an error saying "error: incompatible types when returning type ‘struct Books *’ but ‘struct Books’ was expected" */
+
+struct Books *book_create(char *bookTitle, char *bookAuthor, char *bookSubject, int book_id)
+{
+	struct Books *books = malloc(sizeof(struct Books));
+	//assert(books!=NULL);
+	books->title = strdup(bookTitle);
+	books->author = strdup(bookAuthor);
+	books->subject = strdup(bookSubject);
+	books->book_id = book_id;
+	return books;
+}
+//arguments to this function has to be a structure type which is a pointer to structure
+void book_destroy(struct Books *books)
+{
+	//free the memory location occupied by variable books :)
+	free(books->title);
+	free(books);
+}
+void book_print(struct Books *books)
+{
+	printf("Book Title: %s.\n",books->title);
+	printf("Book Author: %s.\n",books->author);
+	printf("Book Subject: %s.\n",books->subject);
+	printf("Book Id: %d.\n", books->book_id);
+}
+int main(int argc, char *argv[])
+{
+	//create a pointer variable;
+	struct Books *cprograming;
+	/*set it equal to name of the book, because the function book_Create is type pointer and will return a pointer to structure . yay me*/
+	cprograming = book_create("C programing", "Zed Shaw", "Computer Science", 1);
+	book_print(cprograming);
+	return 0;
+}
