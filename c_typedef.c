@@ -9,6 +9,8 @@ typedef unsigned char byte;
 and the declaration becomes:
 byte b1,b2;
 */
+/*The typedef is limited to giving symbolic names to types only where as #define can be used to define alias for values as well, like you can define 1 as ONE etc*/
+/*The typedef interpretation is performed by complier where as #define statement are processed by rhe preprocessor*/
 typedef struct Books
 {
 	char *title;
