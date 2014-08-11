@@ -17,7 +17,7 @@ void copyStr(int argc, char *argv[])
 		i++;
 	}
 	
-	printf("First way to copy strings without using the function strcpy");
+	printf("Second way to copy strings without using the function strcpy");
 	i=0;
 	while(*(argv+i)!='\0')
 	{

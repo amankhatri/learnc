@@ -5,7 +5,6 @@
 void copyStr(int argc, char *argv[])
 {	
 	
-		printf("arguments in are %s.\n", *(argv+1));
 	/*initializing string str with some random values so we don't get segmentation fault*/
 	/*if you do "char *str[] = {};" you will get segmentation fault and core dump"*/
 	printf("First way to copy strings without using the function strcpy");
