@@ -33,7 +33,7 @@ void sortSeries(char *arg[])
 		else
 		{
 			printf("I am breaking.\n");
-			break;
+			
 		}
 	
 	}

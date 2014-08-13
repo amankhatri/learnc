@@ -26,14 +26,14 @@ void sortSeries(char *arg[])
 		{
 			temp = atoi (arg[i]);
 			arg[i] = arg[i+1];
-			arg[i+1] = temp;
+			*arg[i+1] = temp;
 			i++;
 			printf("stuck\n");
 		}
 		else
 		{
 			printf("I am breaking.\n");
-			break;
+			
 		}
 	
 	}
