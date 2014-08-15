@@ -52,6 +52,9 @@ void PrintBoard(const int *board)
 int main(int argc, char *argv[])
 {
 	int board[25];
+	//printing stack address.
+	printf("Stackaddress is near %p\n", &board[0]);
+	printf("Stackaddress is near %p using second format\n", &board);
 /*Fix this: Process terminating with default action of signal 11 (SIGSEGV)
 ==3345==  Access not within mapped region at address 0x948053D58
 ==3345==    at 0x4005DA: InitialiseBoard (in /home/khatri/learnc/ticTacToe/ch30)
@@ -62,7 +65,8 @@ int main(int argc, char *argv[])
 ==3345==  main thread stack using the --main-stacksize= flag.
 ==3345==  The main thread stack size used in this run was 8388608.*/
 	//stack memory allocation error
-	//InitialiseBoard(&board[0]);
+
+	InitialiseBoard(&board[0]);
 /*or we can give InitialiseBoard the address of first element of board like this
 	InitialiseBoard(&board[0]);*/
 	//PrintBoard(&board[0]);
